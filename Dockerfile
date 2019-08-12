@@ -35,7 +35,7 @@ COPY --chown=director:director ./server /var/www/${WORKING_DIR_NAME}/
 
 USER director
 
-EXPOSE 8080
+EXPOSE 8083
 
 CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
 
