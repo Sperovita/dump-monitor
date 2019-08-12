@@ -1,0 +1,4 @@
+#!/bin/bash
+CONTAINER_NAME="$(grep COMPOSE_PROJECT_NAME .env | cut -d '=' -f2 | tr -d '\015')";
+CONTAINER_NAME+="_app"
+docker exec -it $CONTAINER_NAME /bin/sh

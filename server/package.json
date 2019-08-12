@@ -1,0 +1,16 @@
+{
+  "name": "dump-monitor",
+  "version": "1.0.0",
+  "description": "Monitors an html file for changes and updates on change in the client",
+  "main": "app.js",
+  "repository": "https://github.com/Sperovita/dump-monitor.git",
+  "author": "Greg Ransons",
+  "license": "0BSD",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "dependencies": {
+    "express": "^4.17.1",
+    "socket.io": "^2.2.0"
+  }
+}

@@ -1,0 +1,27 @@
+# For traefik deployment testing
+version: '3.7'
+
+services:
+  app:
+    container_name: ${COMPOSE_PROJECT_NAME}_app
+    build:
+      context: .
+      args:
+        - DEPLOY=${DEPLOY}
+        - WORKING_DIR_NAME=${COMPOSE_PROJECT_NAME}
+    networks:
+      - frontend
+    volumes:
+      - ./server:/var/www/${COMPOSE_PROJECT_NAME}
+      - ./dump:/var/www/dump
+    labels:
+      - "traefik.docker.network=${TRAEFIK_NETWORK}"
+      - "traefik.frontend.rule=Host:${HOST_NAME}"
+      - "traefik.frontend.entryPoints=https"
+      - "traefik.web.port=8083"
+    restart: unless-stopped
+
+networks:
+  frontend:
+    external:
+      name: ${TRAEFIK_NETWORK}
