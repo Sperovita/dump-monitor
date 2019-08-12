@@ -8,6 +8,7 @@ const port = 8083;
 
 const staticPath = path.join(__dirname, '/public');
 const dumpFile = '../dump/dump.html';
+let fileFound = false;
 
 app.use(express.static(staticPath));
 
@@ -15,21 +16,35 @@ server.listen(port, () => {
     console.log('Server Initialized on Port ' + port);
 });
 
+
+const dumpUpdateEmit = () => {
+    console.log('Dump Changed');
+    if (fileFound) {
+        io.emit('dumpUpdate', fs.readFileSync(dumpFile, "utf8"));
+    } else {
+        io.emit('dumpUpdate', 'File Not Found');
+    }
+}
+
+fs.watchFile(dumpFile, dumpUpdateEmit);
+
 io.on('connection', (socket) => {
     console.log(socket.id + ' connected.');
-    
 
-    const dumpWatcher = (curr, prev) => {
-        console.log('Dump Changed');
-        io.to(socket.id).emit('dumpUpdate', fs.readFileSync(dumpFile, "utf8"));
-    };
+    try {
+        if (fs.existsSync(dumpFile)) {
+            fileFound = true;
+        }else{
+            fileFound = false;
+        }
+    } catch (err) {
+        console.error(err)
+        fileFound = false;
+    }
 
-    io.to(socket.id).emit('dumpUpdate', fs.readFileSync(dumpFile, "utf8"));
-    
-    fs.watchFile(dumpFile, dumpWatcher);
+    dumpUpdateEmit();
 
     socket.on('disconnect', function () {
-        fs.unwatchFile(dumpFile, dumpWatcher);
         console.log(socket.id + ' disconnected.');
     });
 
