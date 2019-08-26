@@ -20,8 +20,8 @@ RUN if [ $(getent group ${GID}) ] ; then groupmod -g ${REPLACEMENT_GID} $(getent
     chown -R director.director /run && \
     mkdir -p /var/www/${WORKING_DIR_NAME} && \
     chown -R director.director /var/www/${WORKING_DIR_NAME} && \
-    mkdir -p /var/www/${WORKING_DIR_NAME} && \
-    chown -R director.director /var/www/${WORKING_DIR_NAME}
+    mkdir -p /var/www/dump && \
+    chown -R director.director /var/www/dump
 
 WORKDIR /var/www/${WORKING_DIR_NAME}
 
